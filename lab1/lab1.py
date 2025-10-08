@@ -72,3 +72,20 @@ plt.subplot(1, 2, 2)
 plt.imshow(laplacian_image, cmap='gray')
 plt.title('Laplacian of Gaussian (LoG)')
 plt.show()
+
+
+### SECTION 4 ###
+
+# Compute the 2D FFT of the image
+f = np.fft.fft2(img)
+fshift = np.fft.fftshift(f)
+
+# Compute the magnitude spectrum and use logarithmic scaling for better visualization
+magnitude_spectrum = 20 * np.log(np.abs(fshift))
+
+# Plot the original image and its magnitude spectrum
+plt.subplot(121), plt.imshow(img, cmap='gray')
+plt.title('Input Image'), plt.xticks([]), plt.yticks([])
+plt.subplot(122), plt.imshow(magnitude_spectrum, cmap='gray')
+plt.title('Magnitude Spectrum'), plt.xticks([]), plt.yticks([])
+plt.show()
