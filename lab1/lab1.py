@@ -52,5 +52,23 @@ for i in range(6):
     plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray', vmin=0, vmax=255)
     plt.title(titles[i])
     plt.xticks([]), plt.yticks([])
+plt.show()
 
+
+### SECTION 3 ###
+
+sigma = 1.0
+blurred_image = cv.GaussianBlur(img, (5, 5), sigma)
+
+# Apply Laplacian
+laplacian_image = cv.Laplacian(blurred_image, cv.CV_64F)
+laplacian_image = cv.convertScaleAbs(laplacian_image)
+
+# Plot original and Laplacian images
+plt.subplot(1, 2, 1)
+plt.imshow(img, cmap='gray')
+plt.title('Original Image')
+plt.subplot(1, 2, 2)
+plt.imshow(laplacian_image, cmap='gray')
+plt.title('Laplacian of Gaussian (LoG)')
 plt.show()
