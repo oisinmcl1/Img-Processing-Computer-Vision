@@ -83,7 +83,7 @@ for i, threshold in enumerate(thresholds):
     plt.axis('off')
 
 
-ret, thresh = cv.threshold(img_equalized, 200, 255, cv.THRESH_BINARY)
+ret, threshold_img = cv.threshold(img_equalized, 200, 255, cv.THRESH_BINARY)
 
 # Plot thresholded image
 plt.figure(figsize=(6, 6))
@@ -93,8 +93,46 @@ plt.title('Equalized Image')
 plt.axis('off')
 
 plt.subplot(1, 2, 2)
-plt.imshow(thresh, cmap='gray')
+plt.imshow(threshold_img, cmap='gray')
 plt.title('Thresholded Image')
 plt.axis('off')
 
+plt.show()
+
+
+# Removing noise with morphological operations
+kernel = np.ones((5, 5), np.uint8)
+eroded_img = cv.erode(threshold_img, kernel, iterations=1)
+dilated_img = cv.dilate(threshold_img, kernel, iterations=1)
+opened_img = cv.morphologyEx(threshold_img, cv.MORPH_OPEN, kernel)
+closed_img = cv.morphologyEx(threshold_img, cv.MORPH_CLOSE, kernel)
+
+# Plot morphological operations
+plt.figure(figsize=(12, 8))
+plt.subplot(2, 3, 1)
+plt.imshow(threshold_img, cmap='gray')
+plt.title('Original Thresholded Image')
+plt.axis('off')
+
+plt.subplot(2, 3, 2)
+plt.imshow(eroded_img, cmap='gray')
+plt.title('Eroded Image')
+plt.axis('off')
+
+plt.subplot(2, 3, 3)
+plt.imshow(dilated_img, cmap='gray')
+plt.title('Dilated Image')
+plt.axis('off')
+
+plt.subplot(2, 3, 4)
+plt.imshow(opened_img, cmap='gray')
+plt.title('Opened Image')
+plt.axis('off')
+
+plt.subplot(2, 3, 5)
+plt.imshow(closed_img, cmap='gray')
+plt.title('Closed Image')
+plt.axis('off')
+
+plt.tight_layout()
 plt.show()
