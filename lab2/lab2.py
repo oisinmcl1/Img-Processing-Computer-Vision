@@ -69,3 +69,32 @@ plt.axis('off')
 
 plt.tight_layout()
 plt.show()
+
+
+# Thresholding
+thresholds = [80, 100, 120, 140, 160, 180, 200, 220, 240]
+
+for i, threshold in enumerate(thresholds):
+    ret, thresh_img = cv.threshold(img_equalized, threshold, 255, cv.THRESH_BINARY)
+
+    plt.subplot(3, 3, i + 1)
+    plt.imshow(thresh_img, cmap='gray')
+    plt.title(f'Threshold: {threshold}')
+    plt.axis('off')
+
+
+ret, thresh = cv.threshold(img_equalized, 200, 255, cv.THRESH_BINARY)
+
+# Plot thresholded image
+plt.figure(figsize=(6, 6))
+plt.subplot(1, 2, 1)
+plt.imshow(img_equalized, cmap='gray')
+plt.title('Equalized Image')
+plt.axis('off')
+
+plt.subplot(1, 2, 2)
+plt.imshow(thresh, cmap='gray')
+plt.title('Thresholded Image')
+plt.axis('off')
+
+plt.show()
