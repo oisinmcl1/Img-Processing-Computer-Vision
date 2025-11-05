@@ -6,6 +6,9 @@ IMG_PATH = "me.jpg"
 img = cv.imread(IMG_PATH)
 
 # =================== TASK 1 ===================
+"""
+CANNY EDGE DETECTION WITH DIFFERENT THRESHOLDS
+"""
 
 # Convert to grayscale and apply Gaussian blur
 gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -38,6 +41,9 @@ plt.show()
 # ==============================================
 
 # =================== TASK 2 ===================
+"""
+CORNER AND SALIENT POINT DETECTION USING HARRIS AND SHI-TOMASI METHODS
+"""
 
 # Convert to float32 for Harris corner detection
 gray_f = np.float32(gray)
@@ -83,6 +89,9 @@ plt.show()
 # ==============================================
 
 # =================== TASK 3 ===================
+"""
+IMAGE REGISTRATION USING SIFT AND HOMOGRAPHY
+"""
 
 IMG_PATH = "lena.png"
 img1 = cv.imread(IMG_PATH)
@@ -142,6 +151,9 @@ plt.show()
 # ==============================================
 
 # =================== TASK 4 ===================
+"""
+LINE DETECTION USING HOUGH TRANSFORM
+"""
 
 IMG_PATH = "Lena.png"
 img = cv.imread(IMG_PATH)
