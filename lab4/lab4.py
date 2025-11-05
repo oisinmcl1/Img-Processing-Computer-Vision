@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 
-IMG_PATH = "flowers.jpg"
+IMG_PATH = "me.jpg"
 img = cv.imread(IMG_PATH)
 
 # =================== TASK 1 ===================
@@ -78,6 +78,65 @@ plt.subplot(1, 3, 3);
 plt.imshow(cv.cvtColor(shi_img, cv.COLOR_BGR2RGB));
 plt.title("Shi–Tomasi");
 plt.axis("off")
+plt.show()
+
+# ==============================================
+
+# =================== TASK 3 ===================
+
+IMG_PATH = "lena.png"
+img1 = cv.imread(IMG_PATH)
+
+# Rotate and scale the image to create a second image
+h, w = img1.shape[:2]
+M = cv.getRotationMatrix2D((w / 2, h / 2), 15, 1.1)  # rotate + scale
+
+# Warp the image using the transformation matrix
+img2 = cv.warpAffine(img1, M, (w, h))
+gray1 = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
+gray2 = cv.cvtColor(img2, cv.COLOR_BGR2GRAY)
+
+# Use SIFT to detect and compute keypoints and descriptors
+det = cv.SIFT_create()
+k1, d1 = det.detectAndCompute(gray1, None)
+k2, d2 = det.detectAndCompute(gray2, None)
+
+# Nearest neighbor matching with ratio test
+norm = cv.NORM_L2
+bf = cv.BFMatcher(norm)
+matches = bf.knnMatch(d1, d2, k=2)
+
+# Good matches based on Lowe's ratio test
+good = []
+for m, n in matches:
+    if m.distance < 0.75 * n.distance:
+        good.append(m)
+
+# Draw matches
+match_vis = cv.drawMatches(img1, k1, img2, k2, good[:60], None, flags=cv.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+
+# If enough good matches are found, compute homography
+if len(good) >= 4:
+    # Homography computation
+    src = np.float32([k1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+    dst = np.float32([k2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+
+    # Find homography using RANSAC
+    H, mask = cv.findHomography(src, dst, cv.RANSAC, 5.0)
+
+    # If homography is found, warp img1 to img2's perspective
+    if H is not None:
+        warped = cv.warpPerspective(img1, H, (w, h))
+        overlay = cv.addWeighted(img2, 0.5, warped, 0.5, 0)
+
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1);
+plt.imshow(cv.cvtColor(match_vis, cv.COLOR_BGR2RGB));
+plt.title("Matches");
+plt.axis("off")
+plt.subplot(1, 2, 2)
+plt.axis("off")
+plt.tight_layout()
 plt.show()
 
 # ==============================================
