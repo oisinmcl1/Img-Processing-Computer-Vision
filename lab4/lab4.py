@@ -64,19 +64,19 @@ if pts is not None:
         cv.circle(shi_img, (x, y), 3, (0, 255, 0), -1)
 
 plt.figure(figsize=(12, 4))
-plt.subplot(1, 3, 1);
-plt.imshow(cv.cvtColor(img, cv.COLOR_BGR2RGB));
-plt.title("Original");
+plt.subplot(1, 3, 1)
+plt.imshow(cv.cvtColor(img, cv.COLOR_BGR2RGB))
+plt.title("Original")
 
 plt.axis("off")
 plt.subplot(1, 3, 2);
-plt.imshow(cv.cvtColor(harris_img, cv.COLOR_BGR2RGB));
-plt.title("Harris");
+plt.imshow(cv.cvtColor(harris_img, cv.COLOR_BGR2RGB))
+plt.title("Harris")
 plt.axis("off")
 
 plt.subplot(1, 3, 3);
-plt.imshow(cv.cvtColor(shi_img, cv.COLOR_BGR2RGB));
-plt.title("Shi–Tomasi");
+plt.imshow(cv.cvtColor(shi_img, cv.COLOR_BGR2RGB))
+plt.title("Shi–Tomasi")
 plt.axis("off")
 plt.show()
 
@@ -137,6 +137,39 @@ plt.axis("off")
 plt.subplot(1, 2, 2)
 plt.axis("off")
 plt.tight_layout()
+plt.show()
+
+# ==============================================
+
+# =================== TASK 4 ===================
+
+IMG_PATH = "Lena.png"
+img = cv.imread(IMG_PATH)
+
+gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+blur = cv.GaussianBlur(gray, (5, 5), 1.0)
+
+# Canny edge detection and Hough Line Transform
+edges = cv.Canny(blur, 50, 150)
+lines = cv.HoughLinesP(edges, rho=1, theta=np.pi / 180,
+                       threshold=80, minLineLength=40, maxLineGap=10)
+out = img.copy()
+if lines is not None:
+    for l in lines:
+        # Get line endpoints
+        x1, y1, x2, y2 = l[0]
+        cv.line(out, (x1, y1), (x2, y2), (255, 0, 0), 2)
+
+plt.figure(figsize=(10, 4))
+plt.subplot(1, 2, 1);
+plt.imshow(edges, cmap="gray");
+plt.title("Canny");
+plt.axis("off")
+
+plt.subplot(1, 2, 2);
+plt.imshow(cv.cvtColor(out, cv.COLOR_BGR2RGB));
+plt.title("Hough Lines");
+plt.axis("off")
 plt.show()
 
 # ==============================================
